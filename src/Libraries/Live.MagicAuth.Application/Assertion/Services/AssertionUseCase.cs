@@ -4,7 +4,10 @@ using Live.MagicAuth.Application.Assertion.Models;
 using Live.MagicAuth.Application.Credentials;
 using Live.MagicAuth.Application.Customers;
 using Live.MagicAuth.Application.Shared;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace Live.MagicAuth.Application.Assertion.Services
 {
@@ -93,6 +96,11 @@ namespace Live.MagicAuth.Application.Assertion.Services
             // 2. Get Credential by credentialId and Get credential counter from database
             (var creds, uint storedCounter, byte[] pubKey) = credentialFactory.GetCredentialByCredentialIdAndSignatureCount(authenticatorAssertionRawResponse.Id);
 
+            // 3. Get the customer associated with this credential
+            var customerModel = customerFactory.GetCustomerByCredentialId(authenticatorAssertionRawResponse.Id);
+
+            if (customerModel?.Customer is null) return Results.Json(new { status = "error", errorMessage = "User not found" });
+
             // 4. Create callback to check if userhandle owns the credentialId
             IsUserHandleOwnerOfCredentialIdAsync callback = async (args, cancellationToken) =>
             {
@@ -104,6 +112,26 @@ namespace Live.MagicAuth.Application.Assertion.Services
 
             // 6. Store the updated counter
             credentialFactory.UpdateCounter(res.CredentialId, res.Counter);
+
+            // 7. Sign in the user with cookie
+            var customer = customerModel.Customer;
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, Convert.ToBase64String(customer.Id)),
+                new Claim(ClaimTypes.Email, customer.Name),
+                new Claim(ClaimTypes.Name, customer.DisplayName ?? customer.Name)
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+            await httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, new AuthenticationProperties
+            {
+                IsPersistent = true,
+                ExpiresUtc = DateTimeOffset.UtcNow.AddHours(24),
+                AllowRefresh = true,
+            });
+
 
             // 7. return OK to client
             return Results.Ok(res);

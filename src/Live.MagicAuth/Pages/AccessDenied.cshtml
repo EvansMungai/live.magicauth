@@ -1,0 +1,79 @@
+﻿@page
+@model Live.MagicAuth.Pages.AccessDeniedModel
+@{
+    ViewData["Title"] = "Access Denied";
+    Layout = "_Layout";
+}
+
+<!-- Main Content -->
+<main class="access-denied-main">
+    <div class="access-denied-container">
+
+        <!-- Header + Status Group -->
+        <div class="header-group">
+
+            <!-- Header: Lock + Message -->
+            <div class="header-row">
+                <div class="lock-animation">
+                    <svg class="lock-icon" xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    <div class="lock-shine"></div>
+                </div>
+
+                <div class="message-section">
+                    <h1>Access Denied</h1>
+                    <p class="subtitle">You must be authenticated to view this page</p>
+                </div>
+            </div>
+
+            <!-- Status Badge -->
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span>Not Authenticated</span>
+            </div>
+
+        </div>
+
+        <!-- Info Card -->
+        <div class="info-card">
+            <div class="info-icon">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+            </div>
+
+            <div class="info-content">
+                <h3>Authentication Required</h3>
+                <p>This is a protected resource. Please log in to continue.</p>
+                <div class="countdown-text">
+                    Redirecting to login in
+                    <strong><span id="countdown">5</span> seconds</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="action-section">
+            <button class="btn-primary" onclick="redirectToLogin()">Go to Login</button>
+            <a href="/" class="btn-secondary">Return Home</a>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+    </div>
+
+    <script src="~/js/accessdenied.js"></script>
+</main>

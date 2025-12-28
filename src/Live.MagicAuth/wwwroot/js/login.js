@@ -105,6 +105,6 @@ async function verifyAssertionWithServer(assertedCredential) {
     }
     console.log("Redirecting")
     // redirect to dashboard to show keys
-    window.location.href = "/"
+    window.location.href = "/Dashboard"
     //+ value("#login-username");
 }

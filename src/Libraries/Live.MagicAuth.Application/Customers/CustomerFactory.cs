@@ -69,7 +69,25 @@ namespace Live.MagicAuth.Application.Customers
 
             return customerModel;
         }
+        public CustomerModel GetCustomerByCredentialId(byte[] credentialId)
+        {
+            var credentials = credentialService.GetCredentialsByCredentialId(credentialId);
+            var credential = credentials.FirstOrDefault();
 
+            if (credential is null) return null;
+
+            var customer = customerService.GetCustomerById(credential.CustomerId);
+
+            if (customer is null) return null;
+
+            CustomerModel customerModel = new CustomerModel
+            {
+                Customer = customer,
+                Credentials = credentialService.GetCredentialsByCustomerId(customer.Id)
+            };
+
+            return customerModel;
+        }
         #endregion
     }
 }

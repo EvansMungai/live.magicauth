@@ -4,6 +4,8 @@ using Live.MagicAuth.Assertion;
 using Live.MagicAuth.Attestation;
 using Live.MagicAuth.Domain.Infrastructure.Data;
 using Live.MagicAuth.Migrations;
+using Live.MagicAuth.SignOut;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -70,6 +72,23 @@ namespace Live.MagicAuth
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SameSite = SameSiteMode.Unspecified;
             });
+            serviceCollection.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            }).AddCookie(options =>
+            {
+                options.LoginPath = "/AccessDenied";
+                options.LogoutPath = "/auth/logout";
+                options.AccessDeniedPath = "/AccessDenied";
+                options.ExpireTimeSpan = TimeSpan.FromHours(24);
+                options.SlidingExpiration = true;
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Lax;
+            });
+            serviceCollection.AddAuthorization();
         }
 
         /// <summary>
@@ -88,11 +107,14 @@ namespace Live.MagicAuth
             applicationBuilder.UseSession();
             applicationBuilder.UseStaticFiles();
             applicationBuilder.UseRouting();
+            applicationBuilder.UseAuthentication();
+            applicationBuilder.UseAuthorization();
             applicationBuilder.UseEndpoints(endpoints => 
             {
                 endpoints.MapRazorPages();
                 endpoints.MapAttestationRoutes();
                 endpoints.MapAssertionRoutes();
+                endpoints.MapSignOutRoutes();
                 endpoints.MapOpenApi();
                 endpoints.MapScalarApiReference();
             });
