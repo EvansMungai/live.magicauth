@@ -2,6 +2,7 @@
 using Live.MagicAuth.Domain.Credentials.Services;
 using Live.MagicAuth.Domain.Customers;
 using Live.MagicAuth.Domain.Customers.Services;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using System.Text;
 
 namespace Live.MagicAuth.Application.Customers
@@ -57,7 +58,7 @@ namespace Live.MagicAuth.Application.Customers
                     DisplayName = username,
                     Id = Encoding.UTF8.GetBytes(username)
                 };
-                
+
                 customerService.InsertCustomer(customer);
 
                 customerModel.Customer = customer;
@@ -69,6 +70,39 @@ namespace Live.MagicAuth.Application.Customers
 
             return customerModel;
         }
+        public CustomerModel GetCustomerWithCredentials(string username, string displayName)
+        {
+            //Check if the username parameter is null or empty
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                throw new ArgumentNullException("Username cannot be null or empty.", nameof(username));
+            }
+            // Initialize the customer model
+            var customerModel = new CustomerModel();
+            // Retrieve the customer by username
+            customerModel.Customer = customerService.GetCustomerByName(username);
+            // Check it the customer is not found
+            if (customerModel.Customer is null)
+            {
+                var customer = new Customer
+                {
+                    Name = username,
+                    DisplayName = displayName,
+                    Id = Encoding.UTF8.GetBytes(username)
+                };
+
+                customerService.InsertCustomer(customer);
+
+                customerModel.Customer = customer;
+
+                return customerModel;
+            }
+            //Retrieve the customers credentials
+            customerModel.Credentials = credentialService.GetCredentialsByCustomerId(customerModel.Customer.Id);
+
+            return customerModel;
+        }
+
         public CustomerModel GetCustomerByCredentialId(byte[] credentialId)
         {
             var credentials = credentialService.GetCredentialsByCredentialId(credentialId);

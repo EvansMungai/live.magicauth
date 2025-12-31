@@ -48,7 +48,7 @@ namespace Live.MagicAuth.Application.Attestation.Services
         public IResult MakeAttestationOptions(AttestationOptionsRequestModel attestationOptionsRequestModel)
         {
             //Get user from db by username.
-            var customerModel = customerFactory.GetCustomerWithCredentials(attestationOptionsRequestModel.Username);
+            var customerModel = customerFactory.GetCustomerWithCredentials(attestationOptionsRequestModel.Username, attestationOptionsRequestModel.DisplayName);
             //Create a new Fido2User object
             var user = new Fido2User
             {

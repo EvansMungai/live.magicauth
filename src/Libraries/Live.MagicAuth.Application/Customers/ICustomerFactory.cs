@@ -14,7 +14,7 @@ namespace Live.MagicAuth.Application.Customers
         /// <param name="username">Username</param>
         /// <returns>Customer model</returns>
         CustomerModel GetCustomerWithCredentials(string username);
-
+        CustomerModel GetCustomerWithCredentials(string username, string displayName);
         CustomerModel GetCustomerByCredentialId(byte[] credentialId);
     }
 }
