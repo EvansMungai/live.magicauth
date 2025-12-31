@@ -81,7 +81,7 @@ namespace Live.MagicAuth
             {
                 options.LoginPath = "/AccessDenied";
                 options.LogoutPath = "/auth/logout";
-                options.AccessDeniedPath = "/AccessDenied";
+                options.AccessDeniedPath = "/NotAuthorized";
                 options.ExpireTimeSpan = TimeSpan.FromHours(24);
                 options.SlidingExpiration = true;
                 options.Cookie.HttpOnly = true;

@@ -103,8 +103,13 @@ async function verifyAssertionWithServer(assertedCredential) {
         showErrorAlert(response.errorMessage);
         return;
     }
-    console.log("Redirecting")
+    console.log("Server response after assertion: ", response);
+    //console.log("Redirecting")
     // redirect to dashboard to show keys
-    window.location.href = "/Dashboard"
+    if (response.role === "admin") {
+        window.location.href = "/admindashboard";
+    } else {
+        window.location.href = "/dashboard";
+    }
     //+ value("#login-username");
 }

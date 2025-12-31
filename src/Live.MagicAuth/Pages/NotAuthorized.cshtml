@@ -1,10 +1,9 @@
 ﻿@page
-@model Live.MagicAuth.Pages.AccessDeniedModel
+@model Live.MagicAuth.Pages.NotAuthorizedModel
 @{
-    ViewData["Title"] = "Access Denied";
+    ViewData["Title"] = "Not Authorized";
     Layout = "_Layout";
 }
-
 <!-- Main Content -->
 <main class="access-denied-main">
     <div class="access-denied-container">
@@ -17,7 +16,7 @@
                 <div class="lock-animation">
                     <svg class="lock-icon" xmlns="http://www.w3.org/2000/svg"
                          viewBox="0 0 24 24" fill="none"
-                         stroke="currentColor" stroke-width="2"
+                         stroke="#dd6b20" stroke-width="2"
                          stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                         <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
@@ -26,8 +25,8 @@
                 </div>
 
                 <div class="message-section">
-                    <h1>Access Denied</h1>
-                    <p class="subtitle">You must be authenticated to view this page</p>
+                    <h1>Not Authorized</h1>
+                    <p class="subtitle">You are not authorized to view this page</p>
                 </div>
             </div>
         </div>
@@ -37,7 +36,7 @@
             <div class="info-icon">
                 <svg xmlns="http://www.w3.org/2000/svg"
                      viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="2"
+                     stroke="#dd6b20" stroke-width="2"
                      stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="10"></circle>
                     <line x1="12" y1="16" x2="12" y2="12"></line>
@@ -46,19 +45,13 @@
             </div>
 
             <div class="info-content">
-                <h3>Authentication Required</h3>
-                <p>This is a protected resource. Please log in to continue.</p>
+                <h3>Authorization Required</h3>
+                <p>This is a protected resource. You are not authorized to view this page..</p>
                 <div class="countdown-text">
-                    Redirecting to login in
+                    Redirecting to your Dashboard
                     <strong><span id="countdown">5</span> seconds</strong>
                 </div>
             </div>
-        </div>
-
-        <!-- Actions -->
-        <div class="action-section">
-            <button class="btn-primary" onclick="redirectToLogin()">Go to Login</button>
-            <a href="/" class="btn-secondary">Return Home</a>
         </div>
 
         <!-- Progress Bar -->
@@ -67,6 +60,9 @@
         </div>
 
     </div>
-
-    <script src="~/js/accessdenied.js"></script>
+    <script>
+        const userRole = "@Model.Role".toLowerCase();
+    </script>
+    <script src="~/js/notauthorized.js"></script>
 </main>
+s

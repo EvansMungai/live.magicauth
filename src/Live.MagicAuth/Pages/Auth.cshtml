@@ -40,12 +40,13 @@
 
                 <button type="submit" class="btn submit">@Model.Operation</button>
             </form>
-            @if(string.Equals(Model.Operation, AuthOperations.Login, StringComparison.InvariantCultureIgnoreCase))
+            @if (string.Equals(Model.Operation, AuthOperations.Login, StringComparison.InvariantCultureIgnoreCase))
             {
                 <p class="signup-text">
                     Not a Member yet? <a href="/auth/register">Sign Up</a>
                 </p>
-            } else
+            }
+            else
             {
                 <p class="signup-text">
                     Have an account? <a href="/auth/login">Login</a>

@@ -135,7 +135,12 @@ namespace Live.MagicAuth.Application.Assertion.Services
 
 
             // 7. return OK to client
-            return Results.Ok(res);
+            return Results.Ok(new
+            {
+                status = "ok",
+                role = customer.Role,
+                assertion = res
+            });
         }
 
         #endregion

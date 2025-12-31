@@ -5,8 +5,8 @@ using System.Security.Claims;
 
 namespace Live.MagicAuth.Pages
 {
-    [Authorize(Roles ="user")]
-    public class DashboardModel : PageModel
+    [Authorize(Roles = "admin")]
+    public class AdminDashboardModel : PageModel
     {
         public string UserEmail { get; set; }
         public string UserId { get; set; }
