@@ -21,6 +21,9 @@ namespace Live.MagicAuth.Domain.Customers
             builder.HasMany<Credential>()
                 .WithOne()
                 .HasForeignKey(credential => credential.CustomerId);
+
+            builder.Property(customer => customer.Role)
+                .HasColumnName("Role").HasColumnType("text").IsRequired().HasDefaultValue("user");
         }
     }
 }

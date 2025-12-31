@@ -119,7 +119,8 @@ namespace Live.MagicAuth.Application.Assertion.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, Convert.ToBase64String(customer.Id)),
                 new Claim(ClaimTypes.Email, customer.Name),
-                new Claim(ClaimTypes.Name, customer.DisplayName ?? customer.Name)
+                new Claim(ClaimTypes.Name, customer.DisplayName ?? customer.Name),
+                new Claim(ClaimTypes.Role, customer.Role)
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

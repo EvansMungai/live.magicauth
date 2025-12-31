@@ -22,5 +22,9 @@ namespace Live.MagicAuth.Domain.Customers
         /// </summary>
         public string DisplayName { get; set; }
 
+        /// <summary>
+        /// Gets or sets the role of the customer account
+        /// </summary>
+        public string Role { get; set; }
     }
 }
